@@ -1,0 +1,47 @@
+package com.codex.quota.domain.model
+
+enum class AppThemeMode {
+    SYSTEM,
+    LIGHT,
+    DARK
+}
+
+enum class WidgetThemeMode(val displayName: String) {
+    DARK_OBSIDIAN("Codex Dark"),
+    SYSTEM_MATERIAL_YOU("Material You");
+
+    companion object {
+        fun fromString(name: String): WidgetThemeMode {
+            return entries.find { it.name.equals(name, ignoreCase = true) } ?: DARK_OBSIDIAN
+        }
+    }
+}
+
+enum class RefreshIntervalMinutes(val minutes: Long, val label: String) {
+    MINUTES_15(15, "15 分钟"),
+    MINUTES_30(30, "30 分钟"),
+    HOURS_1(60, "1 小时"),
+    HOURS_3(180, "3 小时"),
+    HOURS_6(360, "6 小时");
+
+    companion object {
+        fun fromMinutes(minutes: Long): RefreshIntervalMinutes {
+            return entries.find { it.minutes == minutes } ?: MINUTES_30
+        }
+    }
+}
+
+data class UserPreferences(
+    val themeMode: AppThemeMode = AppThemeMode.SYSTEM,
+    val dynamicColor: Boolean = true,
+    val widgetThemeMode: WidgetThemeMode = WidgetThemeMode.DARK_OBSIDIAN,
+    val backgroundSyncEnabled: Boolean = true,
+    val refreshInterval: RefreshIntervalMinutes = RefreshIntervalMinutes.MINUTES_30,
+    val refreshOnAppOpen: Boolean = true,
+    val signedOutNotificationsEnabled: Boolean = true,
+    val quotaAlertsEnabled: Boolean = true,
+    val includeFiveHourQuotaAlerts: Boolean = false,
+    val quotaAlertThresholds: Set<Int> = setOf(5, 10, 25),
+    val hasCompletedOnboarding: Boolean = false,
+    val dismissedRenewalBannerAccountIds: Set<String> = emptySet()
+)
